@@ -3,12 +3,6 @@ local cmp = require("cmp")
 local lspkind = require("lspkind")
 
 cmp.setup {
-  snippet = {
-    expand = function(args)
-      -- For `ultisnips` user.
-      vim.fn["UltiSnips#Anon"](args.body)
-    end,
-  },
   mapping = cmp.mapping.preset.insert {
     ["<Tab>"] = function(fallback)
       if cmp.visible() then
@@ -32,9 +26,9 @@ cmp.setup {
   },
   sources = {
     { name = "nvim_lsp" }, -- For nvim-lsp
-    { name = "ultisnips" }, -- For ultisnips user.
     { name = "path" }, -- for path completion
     { name = "buffer", keyword_length = 2 }, -- for buffer word completion
+    { name = "cmp_r" }, -- For R
   },
   completion = {
     keyword_length = 1,
@@ -48,11 +42,11 @@ cmp.setup {
       mode = "symbol_text",
       menu = {
         nvim_lsp = "[LSP]",
-        ultisnips = "[US]",
         path = "[Path]",
         buffer = "[Buffer]",
         emoji = "[Emoji]",
         omni = "[Omni]",
+        cmp_r = "[R]",
       },
       show_labelDetails = true,
       maxwidth = 40,
@@ -90,3 +84,4 @@ vim.cmd([[
   highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
   highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
 ]])
+

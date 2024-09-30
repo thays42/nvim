@@ -9,8 +9,10 @@ return {
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-omni",
     "quangnguyen30192/cmp-nvim-ultisnips",
+    "R-nvim/cmp-r",
   },
   config = function()
     require("config.nvim-cmp")
+    require("cmp_r").setup({})
   end,
 }
