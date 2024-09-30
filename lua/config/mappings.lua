@@ -41,3 +41,6 @@ keymap.set("n", "<left>", "<c-w>h")
 keymap.set("n", "<Right>", "<C-w>l")
 keymap.set("n", "<Up>", "<C-w>k")
 keymap.set("n", "<Down>", "<C-w>j")
+
+-- Buffers
+keymap.set("n", "<leader>b", ":ls<cr>:b")
