@@ -5,3 +5,4 @@ require("config.autoexplorer")
 
 vim.opt.clipboard = 'unnamed'
 
+require("utils")
