@@ -1,11 +1,5 @@
 local keymap = vim.keymap
 
--- Shortcut for faster save and quit
-keymap.set("n", "<leader>w", "<cmd>update<cr>", { silent = true, desc = "save buffer" })
-
--- Saves the file if modified and quit
-keymap.set("n", "<leader>q", "<cmd>x<cr>", { silent = true, desc = "quit current window" })
-
 -- Move the cursor based on physical lines, not the actual lines.
 keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
 keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
@@ -43,4 +37,4 @@ keymap.set("n", "<Up>", "<C-w>k")
 keymap.set("n", "<Down>", "<C-w>j")
 
 -- Buffers
-keymap.set("n", "<leader>b", ":ls<cr>:b")
+keymap.set("n", "<leader>bb", ":ls<cr>:b")

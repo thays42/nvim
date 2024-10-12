@@ -10,7 +10,6 @@ return {
           vim.api.nvim_buf_set_keymap(0, "v", "<Enter>", "<Plug>RSendSelection", {})
         end
       },
-      R_args = {"--quiet", "--no-save"},
       min_editor_width = 72,
       rconsole_width = 78,
       disable_cmds = {
