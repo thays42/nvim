@@ -107,7 +107,7 @@ return {
         },
       }
 
-      keymap.set("n", "<leader>fs", require("nvim-tree.api").tree.toggle, {
+      keymap.set("n", "<leader>ll", require("nvim-tree.api").tree.toggle, {
         silent = true,
         desc = "toggle nvim-tree",
       })

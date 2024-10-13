@@ -38,3 +38,6 @@ keymap.set("n", "<Down>", "<C-w>j")
 
 -- Buffers
 keymap.set("n", "<leader>bb", ":ls<cr>:b")
+
+-- Tweaking 
+keymap.set("n", "<leader>ev", ":e ~/.config/nvim<cr>", {desc = "Edit nvim configuration"})

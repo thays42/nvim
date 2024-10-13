@@ -131,8 +131,6 @@ return {
       }
     end
 
-
-
     -- Change diagnostic signs.
     fn.sign_define("DiagnosticSignError", { text = '🆇', texthl = "DiagnosticSignError" })
     fn.sign_define("DiagnosticSignWarn", { text = '⚠️', texthl = "DiagnosticSignWarn" })
