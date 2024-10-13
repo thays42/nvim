@@ -14,3 +14,4 @@ vim.o.incsearch = true
 
 -- Scrolling
 vim.o.scrolloff = 5
+vim.opt.showmode = false

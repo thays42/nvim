@@ -6,6 +6,8 @@ keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 keymap.set("n", "^", "g^")
 keymap.set("n", "0", "g0")
 
+keymap.set("i", "jk", "<esc>")
+
 -- Go to start or end of line easier
 keymap.set({ "n", "x" }, "H", "^")
 keymap.set({ "n", "x" }, "L", "g_")

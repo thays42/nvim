@@ -18,7 +18,7 @@ return {
       vim.fn.setqflist({}, ' ', { title = 'Diagnostics', items = qf_items })
 
       -- open quickfix by default
-      vim.cmd[[copen]]
+      vim.cmd [[copen]]
     end
 
     local custom_attach = function(client, bufnr)
@@ -89,18 +89,18 @@ return {
         ]])
 
         local gid = api.nvim_create_augroup("lsp_document_highlight", { clear = true })
-        api.nvim_create_autocmd("CursorHold" , {
+        api.nvim_create_autocmd("CursorHold", {
           group = gid,
           buffer = bufnr,
-          callback = function ()
+          callback = function()
             lsp.buf.document_highlight()
           end
         })
 
-        api.nvim_create_autocmd("CursorMoved" , {
+        api.nvim_create_autocmd("CursorMoved", {
           group = gid,
           buffer = bufnr,
-          callback = function ()
+          callback = function()
             lsp.buf.clear_references()
           end
         })
