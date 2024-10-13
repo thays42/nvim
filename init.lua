@@ -1,6 +1,6 @@
 require("config.lazy")
-require("config.mappings")
-require("config.editing")
+require("config.keymaps")
+require("config.options")
 
 vim.opt.clipboard = 'unnamed'
 
