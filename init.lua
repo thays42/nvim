@@ -104,6 +104,36 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- [[ Python ]]
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "python",
+	callback = function()
+		-- use pep8 standards
+		vim.opt_local.expandtab = true
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.tabstop = 4
+		vim.opt_local.softtabstop = 4
+
+		-- folds based on indentation https://neovim.io/doc/user/fold.html#fold-indent
+		-- if you are a heavy user of folds, consider using `nvim-ufo`
+		vim.opt_local.foldmethod = "indent"
+
+		local iabbrev = function(lhs, rhs)
+			vim.keymap.set("ia", lhs, rhs, { buffer = true })
+		end
+		-- automatically capitalize boolean values. Useful if you come from a
+		-- different language, and lowercase them out of habit.
+		iabbrev("true", "True")
+		iabbrev("false", "False")
+
+		-- in the same way, we can fix habits regarding comments or None
+		iabbrev("--", "#")
+		iabbrev("null", "None")
+		iabbrev("none", "None")
+		iabbrev("nil", "None")
+	end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -412,8 +442,6 @@ require("lazy").setup({
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			-- Enable the following language servers
-			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-			--
 			--  Add any additional override configuration in the following tables. Available keys are:
 			--  - cmd (table): Override the default command used to start the server
 			--  - filetypes (table): Override the default list of associated filetypes for the server
@@ -421,7 +449,25 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				ruff_lsp = {},
+				ruff = {},
+				pylsp = {
+					settings = {
+						pylsp = {
+							plugins = {
+								-- formatters
+								black = { enabled = false },
+								autopep8 = { enabled = false },
+								yapf = { enabled = false },
+								-- linters
+								pylint = { enabled = false },
+								pyflakes = { enabled = false },
+								pycodestyle = { enabled = false },
+								-- auto-completion options
+								jedi_completion = { fuzzy = true },
+							},
+						},
+					},
+				},
 				rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
@@ -547,10 +593,6 @@ require("lazy").setup({
 				},
 			},
 			"saadparwaiz1/cmp_luasnip",
-
-			-- Adds other completion capabilities.
-			--  nvim-cmp does not ship with all sources by default. They are split
-			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
 			"R-nvim/cmp-r",
