@@ -5,6 +5,7 @@
 return {
 	{
 		"Vigemus/iron.nvim",
+		enabled = false,
 		keys = {
 			{ "<leader>re", "<cmd>IronRepl<cr>", desc = "Start REPL" },
 		},
@@ -27,7 +28,7 @@ return {
 					close_window_on_exit = true,
 					repl_definition = {
 						python = require("iron.fts.python").ipython,
-						r = require("iron.fts.r").R,
+						r = require("iron.fts.r").radian,
 					},
 					-- Repl position. Check `iron.view` for more options,
 					-- currently there are four positions: left, right, bottom, top,
@@ -38,12 +39,24 @@ return {
 				},
 				keymaps = {
 					visual_send = "<enter>",
-					send_line = "<enter>",
 					interrupt = "<space>qi",
 					exit = "<space>qq",
 					clear = "<space>qc",
 				},
 			})
 		end,
+	},
+	{
+		"pappasam/nvim-repl",
+		init = function()
+			vim.g["repl_filetype_commands"] = {
+				r = "R",
+				python = "ipython --no-autoindent",
+			}
+			vim.g["repl_split"] = "bottom"
+		end,
+		keys = {
+			{ "<leader>rt", "<cmd>ReplToggle<cr>", desc = "Toggle nvim-repl" },
+		},
 	},
 }

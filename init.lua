@@ -76,7 +76,7 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -136,16 +136,10 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- [[ Lua ]]
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "lua",
-	callback = function()
-		vim.opt_local.expandtab = true
-		vim.opt_local.shiftwidth = 2
-		vim.opt_local.tabstop = 2
-		vim.opt_local.softtabstop = 2
-	end,
-})
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -717,6 +711,12 @@ require("lazy").setup({
 			--  Check out: https://github.com/echasnovski/mini.nvim
 		end,
 	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
@@ -751,6 +751,50 @@ require("lazy").setup({
 				additional_vim_regex_highlighting = { "ruby" },
 			},
 			indent = { enable = true, disable = { "ruby" } },
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "tv",
+					node_incremental = "v",
+					scope_incremental = "V",
+					node_decremental = "<C-v>",
+				},
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["af"] = "@function.outer",
+						["aa"] = "@assignment.outer",
+						["if"] = "@function.inner",
+						["as"] = "@statement.outer",
+					},
+				},
+				move = {
+					enable = true,
+					goto_next_start = {
+						["]m"] = "@function.outer",
+						["]s"] = "@statement.outer",
+						["]d"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+					},
+					goto_next_end = {
+						["]M"] = "@function.outer",
+						["]S"] = "@statement.outer",
+						["]D"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+					},
+					goto_previous_start = {
+						["[m"] = "@function.outer",
+						["[s"] = "@statement.outer",
+						["[d"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+					},
+					goto_previous_end = {
+						["[M"] = "@function.outer",
+						["[S"] = "@statement.outer",
+						["[D"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+					},
+				},
+			},
 		},
 		-- There are additional nvim-treesitter modules that you can use to interact
 		-- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -784,4 +828,18 @@ require("lazy").setup({
 			lazy = "💤 ",
 		},
 	},
+})
+
+local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+-- Repeat movement with ; and ,
+-- ensure ; goes forward and , goes backward regardless of the last direction
+vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "r",
+	callback = function()
+		vim.api.nvim_buf_set_keymap(0, "v", "<enter>", "<Plug>ReplSendVisual", { desc = "Send statement" })
+		vim.api.nvim_buf_set_keymap(0, "n", "<enter>", "vas<cr>`>]s", { desc = "Send statement" })
+	end,
 })
