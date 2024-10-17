@@ -764,6 +764,7 @@ require("lazy").setup({
 				select = {
 					enable = true,
 					lookahead = true,
+					include_surrounding_whitespace = false,
 					keymaps = {
 						["af"] = "@function.outer",
 						["aa"] = "@top_level_function",
