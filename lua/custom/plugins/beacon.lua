@@ -1,0 +1,3 @@
+return {
+	"rainbowhxch/beacon.nvim",
+}
