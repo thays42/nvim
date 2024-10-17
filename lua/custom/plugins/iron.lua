@@ -56,7 +56,7 @@ return {
 			vim.g["repl_split"] = "bottom"
 		end,
 		keys = {
-			{ "<leader>rt", "<cmd>ReplToggle<cr>", desc = "Toggle nvim-repl" },
+			{ "<leader>;", "<cmd>ReplToggle<cr>", desc = "Toggle nvim-repl" },
 		},
 	},
 }
