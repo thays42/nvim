@@ -766,7 +766,7 @@ require("lazy").setup({
 					lookahead = true,
 					keymaps = {
 						["af"] = "@function.outer",
-						["aa"] = "@assignment.outer",
+						["aa"] = "@top_level_function",
 						["if"] = "@function.inner",
 						["as"] = "@statement.outer",
 					},
