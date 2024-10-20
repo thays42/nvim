@@ -11,7 +11,7 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
-vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode and window swap" })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -31,4 +31,4 @@ vim.keymap.set("n", "<leader>bb", "<C-^>", { desc = "Switch to previous buffer" 
 vim.keymap.set("n", "<leader>ww", [[<C-w><C-p>]], { desc = "Switch to previous window" })
 
 -- Easy insert to normal mode
-vim.keymap.set("i", "jk", "<esc>", {})
+vim.keymap.set("i", "jk", "<Esc>", {})
