@@ -48,6 +48,7 @@ return {
 	},
 	{
 		"pappasam/nvim-repl",
+		enabled = false,
 		init = function()
 			vim.g["repl_filetype_commands"] = {
 				r = "R",
