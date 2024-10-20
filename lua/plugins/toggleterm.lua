@@ -6,6 +6,13 @@ return {
 			require("toggleterm").setup({
 				open_mapping = "<leader>;t",
 				direction = "float",
+				size = function(term)
+					if term.direction == "horizontal" then
+						return vim.o.lines * 0.4
+					elseif term.direction == "vertical" then
+						return vim.o.columns * 0.4
+					end
+				end,
 			})
 
 			-- Helper for creating terminal commands
@@ -39,7 +46,7 @@ return {
 				return Terminal:new({
 					cmd = cmd,
 					dir = dir,
-					direction = "horizontal",
+					direction = "vertical",
 					on_open = function(term)
 						vim.cmd("startinsert!")
 					end,
@@ -88,13 +95,13 @@ return {
 			)
 			vim.api.nvim_set_keymap(
 				"n",
-				"<leader>;e",
+				"<leader>;rt",
 				"<cmd>lua ToggleCustomTerminal('r_runtests')<CR>",
 				{ noremap = true, silent = true }
 			)
 			vim.api.nvim_set_keymap(
 				"n",
-				"<leader>;r",
+				"<leader>;rr",
 				"<cmd>lua ToggleCustomTerminal('r_repl')<CR>",
 				{ noremap = true, silent = true }
 			)
