@@ -128,6 +128,8 @@ return {
 			local servers = {
 				ruff = {},
 				r_language_server = {},
+				awk_ls = {},
+				bashls = {},
 				pylsp = {
 					settings = {
 						pylsp = {
