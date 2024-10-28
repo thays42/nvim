@@ -46,7 +46,7 @@ return {
 				return Terminal:new({
 					cmd = cmd,
 					dir = dir,
-					direction = "vertical",
+					direction = "horizontal",
 					on_open = function(term)
 						vim.cmd("startinsert!")
 					end,

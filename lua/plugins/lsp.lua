@@ -130,6 +130,7 @@ return {
 				r_language_server = {},
 				awk_ls = {},
 				bashls = {},
+				gopls = {},
 				pylsp = {
 					settings = {
 						pylsp = {
