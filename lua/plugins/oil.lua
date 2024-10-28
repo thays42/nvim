@@ -22,7 +22,7 @@ return {
 			},
 			keymaps = {
 				["<C-h>"] = false,
-				["<leader>-c"] = "actions.close",
+				["<leader>-q"] = "actions.close",
 				["<leader>-r"] = "actions.refresh",
 			},
 			view_options = {
