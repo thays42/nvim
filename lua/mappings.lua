@@ -21,6 +21,14 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set("n", "<A-h>", "<C-w><", { desc = "Decrease window width" })
+vim.keymap.set("n", "<A-l>", "<C-w>>", { desc = "Increase window width" })
+vim.keymap.set("n", "<A-j>", "<C-w>+", { desc = "Increase window height" })
+vim.keymap.set("n", "<A-k>", "<C-w>-", { desc = "Decrease Window height" })
+vim.keymap.set("n", "<leader>wj", "<C-w>J", { desc = "Move window down" })
+vim.keymap.set("n", "<leader>wk", "<C-w>K", { desc = "Move window up" })
+vim.keymap.set("n", "<leader>wh", "<C-w>H", { desc = "Move window right" })
+vim.keymap.set("n", "<leader>wl", "<C-w>L", { desc = "Move window left" })
 
 -- Traveling lines
 vim.keymap.set("n", "<C-[>", ":m -2<cr>")
