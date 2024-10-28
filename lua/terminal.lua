@@ -7,7 +7,10 @@ local function q2quit(term)
 end
 
 -- Add terminal definitions here.
-function ToggleFloatTerm(cmd, dir)
+function ToggleFloatTerm(cmd, dir, close_on_exit)
+	if close_on_exit == nil then
+		close_on_exit = true
+	end
 	Terminal:new({
 		cmd = cmd,
 		dir = dir,
@@ -16,7 +19,7 @@ function ToggleFloatTerm(cmd, dir)
 		on_close = function(term)
 			vim.cmd("startinsert!")
 		end,
-		close_on_exit = false,
+		close_on_exit = close_on_exit,
 	}):toggle()
 end
 
