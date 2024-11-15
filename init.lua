@@ -1,6 +1,6 @@
-require("options")
-require("mappings")
-require("autocmds")
+require("before.options")
+require("before.mappings")
+require("before.autocmds")
 require("plugin-manager")
 
 -- Treesitter movements
@@ -10,4 +10,5 @@ local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
 vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
 
-require("terminal")
+require("after.terminal")
+require("after.lsp")
