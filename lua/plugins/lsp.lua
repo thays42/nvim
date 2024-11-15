@@ -123,7 +123,6 @@ return {
 			}
 
 			if vim.fn.executable("npm") == 1 then
-				servers["awk_ls"] = {}
 				servers["bashls"] = {}
 			end
 
