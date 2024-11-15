@@ -40,3 +40,9 @@ vim.keymap.set("n", "<leader>ww", [[<C-w><C-p>]], { desc = "Switch to previous w
 
 -- Easy insert to normal mode
 vim.keymap.set("i", "jk", "<Esc>", {})
+
+-- Plug-in Mappings
+vim.keymap.set("n", "<leader>mk", "<cmd>MakeitOpen<cr>", { desc = "Makeit Open" })
+vim.keymap.set("n", "<leader>ml", "<cmd>MakeitRedo<cr>", { desc = "Makeit Redo" })
+vim.keymap.set("n", "<leader>mo", "<cmd>MakeitToggleResults<cr>", { desc = "Makeit Toggle Results" })
+vim.keymap.set("n", "<leader>mn", "<cmd>MakeitStop<cr>", { desc = "Makeit Stop" })
