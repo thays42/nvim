@@ -29,3 +29,31 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(event)
+    local opts = {buffer = event.buf}
+
+    vim.keymap.set({'n', 'x'}, 'gq', function()
+      vim.lsp.buf.format({async = false, timeout_ms = 10000})
+    end, opts)
+  end
+})
+
+-- Language Server Setup
+local lspconfig = require("lspconfig")
+
+local is_executable = vim.fn.executable
+
+if is_executable("lua-language-server") == 1 then
+  lspconfig.lua_ls.setup({})
+end
+
+if is_executable("gopls") == 1 then
+  lspconfig.gopls.setup({})
+end
+
+if is_executable("ruff") == 1 then
+  lspconfig.ruff.setup({})
+end
+
