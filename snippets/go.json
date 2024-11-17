@@ -1,0 +1,1 @@
+{"method":{"body":["func (${1:self} *${2:object}) ${3:fname}($4) $5 {","  $0","}"],"prefix":"method"},"func":{"body":["func ${1:fname}(${2:vname} ${3:vtype}) ${4:ftype} {","  $0","}"],"prefix":"func"}}
