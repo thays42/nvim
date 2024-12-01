@@ -11,6 +11,5 @@ vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
 vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
 
 require("after.terminal")
-require("after.lsp")
 require("after.completions")
-
+require("after.lsp")

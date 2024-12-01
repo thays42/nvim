@@ -3,24 +3,28 @@ local cmp = require('cmp')
 
 cmp.setup({
   sources = {
-    { name = 'luasnip' },
     { name = 'nvim_lsp' },
+    { name = 'luasnip' },
     { name = 'path' },
     { name = 'buffer' },
   },
   mapping = cmp.mapping.preset.insert({
     -- Navigate between completion items
     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = 'select' }),
-    ['<C-n>'] = function(fallback)
-      if cmp.visible() then
-        cmp.mapping.select_next_item()
-      else
-        cmp.complete()
-        vim.wait(500, function() return cmp.visible() end)
-        cmp.select_next_item()
-      end
-    end,
+    ['<C-n>'] = cmp.mapping.select_next_item({ behavior = 'select' }),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+      if cmp.visible() then
+        local entry = cmp.get_selected_entry()
+        if not entry then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        end
+        cmp.confirm()
+      else
+        fallback()
+      end
+    end, { "i", "s", "c", }),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -41,7 +45,7 @@ cmp.setup({
     end,
   },
   completion = {
-    autocomplete = false,
+    keyword_length = 2,
   }
 })
 
