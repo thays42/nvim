@@ -38,15 +38,6 @@ function ToggleRepl(cmd, dir)
   }):toggle()
 end
 
-function ToggleRInterpreter(dir)
-  ToggleRepl('R', dir)
-  opts = { buffer = 0 }
-  vim.keymap.set('t', '<C-w>', [[<Cmd>wincmd p<CR>]], opts)
-  vim.keymap.set('t', '<C-b><C-l>', [[devtools::load_all()<CR>]], opts)
-  vim.keymap.set('t', '<C-b><C-d>', [[roxygen2::roxygenize()<CR>]], opts)
-  vim.keymap.set('t', '<C-q><C-q>', [[q(save="no")<CR>]], opts)
-end
-
 vim.api.nvim_set_keymap(
   "n",
   "<leader>;g",
@@ -54,4 +45,3 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap("n", "<leader>;h", "<cmd>lua ToggleFloatTerm('htop')<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>;rr", "<cmd>lua ToggleRInterpreter()<CR>", { noremap = true, silent = true })
