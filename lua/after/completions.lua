@@ -13,18 +13,6 @@ cmp.setup({
     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = 'select' }),
     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = 'select' }),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-      if cmp.visible() then
-        local entry = cmp.get_selected_entry()
-        if not entry then
-          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-        end
-        cmp.confirm()
-      else
-        fallback()
-      end
-    end, { "i", "s", "c", }),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -70,3 +58,22 @@ vim.keymap.set("n", "<leader>se", function() require("scissors").editSnippet() e
 -- when used in visual mode, prefills the selection as snippet body
 vim.keymap.set({ "n", "x" }, "<leader>sa", function() require("scissors").addNewSnippet() end,
   { desc = "[S]nippet [A]dd" })
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  }),
+  matching = { disallow_symbol_nonprefix_matching = false }
+})
