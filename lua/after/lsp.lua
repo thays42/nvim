@@ -1,14 +1,8 @@
 -- Reserve space in the gutter
 vim.opt.signcolumn = 'yes'
 
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lspconfig_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
+
+
 
 -- This is where you enable features that only work
 -- if there is a language server active in the file
@@ -73,15 +67,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local lspconfig = require("lspconfig")
 
 local is_executable = vim.fn.executable
+local servers = {}
 
 if is_executable("lua-language-server") == 1 then
-  lspconfig.lua_ls.setup({})
+  servers.lua_ls = {}
 end
 
 if is_executable("gopls") == 1 then
-  lspconfig.gopls.setup({})
+  servers.gopls = {}
 end
 
 if is_executable("ruff") == 1 then
-  lspconfig.ruff.setup({})
+  servers.ruff = {}
+end
+
+for server, config in pairs(servers) do
+  config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+  lspconfig[server].setup(config)
 end

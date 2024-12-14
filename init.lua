@@ -14,5 +14,5 @@ require("after.terminal")
 require("after.completions")
 require("after.lsp")
 
+vim.cmd("colorscheme catppuccin")
 vim.opt.background = "dark"
-vim.cmd("colorscheme oxocarbon")
