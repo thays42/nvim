@@ -45,3 +45,5 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap("n", "<leader>;h", "<cmd>lua ToggleFloatTerm('htop')<CR>", { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap("t", "<esc>", [[<C-\><C-n><C-w>p]], { noremap = true, silent = true })
