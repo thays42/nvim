@@ -4,7 +4,7 @@ return {
     'saghen/blink.cmp',
     lazy = false,
     version = '*',
-    build = "cargo build --release",
+    --    build = "cargo build --release",
     dependencies = 'L3MON4D3/LuaSnip',
     opts = {
       keymap = { preset = 'super-tab' },
