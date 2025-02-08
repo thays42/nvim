@@ -1,9 +1,6 @@
 -- Reserve space in the gutter
 vim.opt.signcolumn = 'yes'
 
-
-
-
 -- This is where you enable features that only work
 -- if there is a language server active in the file
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -79,6 +76,14 @@ end
 
 if is_executable("ruff") == 1 then
   servers.ruff = {}
+end
+
+if is_executable("docker-langserver") == 1 then
+  servers.dockerls = {}
+end
+
+if is_executable("docker-compose-langserver") == 1 then
+  servers.docker_compose_language_service = {}
 end
 
 for server, config in pairs(servers) do
