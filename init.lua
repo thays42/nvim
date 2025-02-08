@@ -13,6 +13,3 @@ vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
 require("after.terminal")
 require("after.completions")
 require("after.lsp")
-
-vim.cmd("colorscheme catppuccin")
-vim.opt.background = "dark"
