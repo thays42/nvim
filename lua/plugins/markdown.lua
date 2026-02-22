@@ -19,4 +19,3 @@ return {
     ft = { 'markdown' },
   },
 }
-

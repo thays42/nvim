@@ -14,13 +14,13 @@ function M.parse(content, path_mappings)
   }
 
   -- Extract source directory from <source> element (covr includes this)
-  local source_dir = content:match('<source>([^<]+)</source>') or ''
-  if source_dir ~= '' and not source_dir:match('/$') then
+  local source_dir = content:match '<source>([^<]+)</source>' or ''
+  if source_dir ~= '' and not source_dir:match '/$' then
     source_dir = source_dir .. '/'
   end
 
   -- Find all <class> elements and extract filename + line coverage
-  for fname, block in content:gmatch('<class[^>]*filename="([^"]+)"[^>]*>(.-)</class>') do
+  for fname, block in content:gmatch '<class[^>]*filename="([^"]+)"[^>]*>(.-)</class>' do
     -- Prepend source directory to get absolute path
     local full_path = source_dir .. fname
 
@@ -44,7 +44,7 @@ function M.parse(content, path_mappings)
     local file_data = result.files[mapped_path]
 
     -- Parse <line number="N" hits="H"/> elements
-    for line_num, hits in block:gmatch('<line[^>]*number="(%d+)"[^>]*hits="(%d+)"[^>]*/?>') do
+    for line_num, hits in block:gmatch '<line[^>]*number="(%d+)"[^>]*hits="(%d+)"[^>]*/?>' do
       local ln = tonumber(line_num)
       local hit_count = tonumber(hits)
 

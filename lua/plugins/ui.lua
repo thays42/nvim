@@ -12,7 +12,7 @@ return {
           operators = false,
         },
         overrides = {
-          ['@comment.documentation'] = { fg = '#a89984' },  -- Lighter gray for roxygen
+          ['@comment.documentation'] = { fg = '#a89984' }, -- Lighter gray for roxygen
           -- Pure black background (vitesse-style)
           Normal = { bg = '#000000' },
           NormalFloat = { bg = '#000000' },
@@ -33,7 +33,13 @@ return {
     lazy = false,
     keys = {
       { '-', '<cmd>Oil<CR>', desc = 'Open parent directory' },
-      { '<leader>-', function() require('oil').open(vim.fn.getcwd()) end, desc = 'Open cwd in Oil' },
+      {
+        '<leader>-',
+        function()
+          require('oil').open(vim.fn.getcwd())
+        end,
+        desc = 'Open cwd in Oil',
+      },
     },
     opts = {
       default_file_explorer = true,

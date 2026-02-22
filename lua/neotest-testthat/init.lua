@@ -9,7 +9,7 @@ local M = { name = 'neotest-testthat' }
 ---@return string|nil
 function M.root(dir)
   local lib = require 'neotest.lib'
-  return lib.files.match_root_pattern('DESCRIPTION')(dir)
+  return lib.files.match_root_pattern 'DESCRIPTION'(dir)
 end
 
 ---Filter directories during scanning
@@ -34,7 +34,7 @@ function M.is_test_file(file_path)
     return false
   end
   -- Must be in tests/testthat/ and start with test
-  return file_path:match('tests/testthat/test[^/]*%.[rR]$') ~= nil
+  return file_path:match 'tests/testthat/test[^/]*%.[rR]$' ~= nil
 end
 
 -- Treesitter query for finding testthat tests
@@ -112,19 +112,10 @@ function M.build_spec(args)
     local test_name = position.name:gsub('^["\']', ''):gsub('["\']$', '')
     -- Escape for R regex
     test_name = test_name:gsub('([\\%(%)%.%+%*%?%[%]%^%$])', '\\%1')
-    r_code = string.format(
-      [[pkgload::load_all('%s', quiet = TRUE); testthat::test_file('%s', desc = '%s')]],
-      root,
-      position.path,
-      test_name
-    )
+    r_code = string.format([[pkgload::load_all('%s', quiet = TRUE); testthat::test_file('%s', desc = '%s')]], root, position.path, test_name)
   elseif position.type == 'file' then
     -- Run all tests in a specific file
-    r_code = string.format(
-      [[pkgload::load_all('%s', quiet = TRUE); testthat::test_file('%s')]],
-      root,
-      position.path
-    )
+    r_code = string.format([[pkgload::load_all('%s', quiet = TRUE); testthat::test_file('%s')]], root, position.path)
   else
     -- Run all tests in project
     r_code = string.format([[devtools::test('%s')]], root)
@@ -168,13 +159,13 @@ function M.results(spec, result, tree)
   local has_failure = false
 
   -- Check for testthat failure count > 0
-  local fail_count = content:match('%[ FAIL (%d+) %]')
+  local fail_count = content:match '%[ FAIL (%d+) %]'
   if fail_count and tonumber(fail_count) > 0 then
     has_failure = true
   end
 
   -- Check for R execution errors (but not the word "Error" in general text)
-  if content:match('Error in') or content:match('Execution halted') then
+  if content:match 'Error in' or content:match 'Execution halted' then
     has_failure = true
   end
 

@@ -1,4 +1,3 @@
-
 -- Nerd font support
 vim.g.have_nerd_font = true
 

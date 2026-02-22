@@ -110,7 +110,7 @@ function M.get_function_coverage()
   -- Process each file with coverage
   for filepath, file_coverage in pairs(data.files) do
     -- Only process R files in R/ directory
-    if filepath:match('/R/[^/]+%.[rR]$') then
+    if filepath:match '/R/[^/]+%.[rR]$' then
       local functions = get_r_functions(filepath)
 
       for _, func in ipairs(functions) do
@@ -118,7 +118,7 @@ function M.get_function_coverage()
         table.insert(results, {
           name = func.name,
           file = filepath,
-          filename = filepath:match('([^/]+)$'),
+          filename = filepath:match '([^/]+)$',
           line = func.start_line,
           green = stats.green,
           red = stats.red,

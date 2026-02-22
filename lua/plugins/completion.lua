@@ -45,17 +45,25 @@ return {
       -- Patch documentation popup to align with selected item instead of menu top
       local ok_docs, docs = pcall(require, 'blink.cmp.completion.windows.documentation')
       local ok_menu, menu = pcall(require, 'blink.cmp.completion.windows.menu')
-      if not ok_docs or not ok_menu then return end
+      if not ok_docs or not ok_menu then
+        return
+      end
 
       local orig_update = docs.update_position
       docs.update_position = function()
         orig_update()
-        if not docs.win:is_open() or not menu.win:is_open() then return end
-        if not menu.selected_item_idx then return end
+        if not docs.win:is_open() or not menu.win:is_open() then
+          return
+        end
+        if not menu.selected_item_idx then
+          return
+        end
 
         local doc_winnr = docs.win:get_win()
         local menu_winnr = menu.win:get_win()
-        if not doc_winnr or not menu_winnr then return end
+        if not doc_winnr or not menu_winnr then
+          return
+        end
 
         local top_line = vim.fn.line('w0', menu_winnr)
         local visual_row = menu.selected_item_idx - top_line

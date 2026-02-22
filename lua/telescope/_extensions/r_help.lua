@@ -1,18 +1,18 @@
 -- Telescope extension for searching R documentation
 -- Builds a cached index of all help topics via Rscript (no running R session needed)
 
-local pickers = require('telescope.pickers')
-local finders = require('telescope.finders')
+local pickers = require 'telescope.pickers'
+local finders = require 'telescope.finders'
 local conf = require('telescope.config').values
-local actions = require('telescope.actions')
-local action_state = require('telescope.actions.state')
-local entry_display = require('telescope.pickers.entry_display')
-local previewers = require('telescope.previewers')
+local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
+local entry_display = require 'telescope.pickers.entry_display'
+local previewers = require 'telescope.previewers'
 
 local M = {}
 
 -- Cache directory in nvim state folder
-local cache_dir = vim.fn.stdpath('state') .. '/r_help'
+local cache_dir = vim.fn.stdpath 'state' .. '/r_help'
 local index_cache_file = cache_dir .. '/index.json'
 local pages_cache_dir = cache_dir .. '/pages'
 
@@ -62,13 +62,10 @@ end
 
 -- Get current .libPaths() with their mtimes (for cache validation)
 local function get_libpaths_with_mtimes()
-  local result = vim.system(
-    { 'Rscript', '-e', 'cat(.libPaths(), sep = "\\n")' },
-    { text = true, env = rscript_env }
-  ):wait()
+  local result = vim.system({ 'Rscript', '-e', 'cat(.libPaths(), sep = "\\n")' }, { text = true, env = rscript_env }):wait()
   if result.code == 0 and result.stdout then
     local entries = {}
-    for line in result.stdout:gmatch('[^\n]+') do
+    for line in result.stdout:gmatch '[^\n]+' do
       local stat = vim.loop.fs_stat(line)
       local mtime = stat and stat.mtime.sec or 0
       table.insert(entries, { path = line, mtime = mtime })
@@ -137,7 +134,9 @@ local rscript_env = {
 
 -- Build the help index using Rscript (background process)
 local function build_index(callback)
-  if index_loading then return end
+  if index_loading then
+    return
+  end
   index_loading = true
 
   vim.notify('Building R help index...', vim.log.levels.INFO)
@@ -166,7 +165,7 @@ if (!is.null(db) && !is.null(db$Base)) {
       end
 
       local index = {}
-      for line in result.stdout:gmatch('[^\n]+') do
+      for line in result.stdout:gmatch '[^\n]+' do
         local parts = vim.split(line, '\t', { plain = true })
         if #parts >= 3 then
           table.insert(index, {
@@ -247,21 +246,21 @@ end
 
 -- Create entry maker for telescope
 local function make_entry_maker(opts)
-  local displayer = entry_display.create({
+  local displayer = entry_display.create {
     separator = ' ',
     items = {
       { width = 40 },
       { remaining = true },
     },
-  })
+  }
 
   local make_display = function(entry)
     -- Display as package::topic to match search syntax
     local qualified_name = entry.package .. '::' .. entry.topic
-    return displayer({
+    return displayer {
       { qualified_name, 'TelescopeResultsIdentifier' },
       { entry.title, 'TelescopeResultsComment' },
-    })
+    }
   end
 
   return function(item)
@@ -282,7 +281,7 @@ end
 
 -- Create previewer that shows help content via Rscript
 local function make_previewer()
-  return previewers.new_buffer_previewer({
+  return previewers.new_buffer_previewer {
     title = 'R Help Preview',
     define_preview = function(self, entry, status)
       -- Show immediate feedback with what we know
@@ -310,10 +309,14 @@ local function make_previewer()
           preview_timer = nil
 
           -- Check if buffer still valid
-          if not vim.api.nvim_buf_is_valid(self.state.bufnr) then return end
+          if not vim.api.nvim_buf_is_valid(self.state.bufnr) then
+            return
+          end
 
           fetch_help_content(entry.package, entry.topic, function(content, err)
-            if not vim.api.nvim_buf_is_valid(self.state.bufnr) then return end
+            if not vim.api.nvim_buf_is_valid(self.state.bufnr) then
+              return
+            end
 
             if not content then
               vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, {
@@ -331,7 +334,7 @@ local function make_previewer()
         end)
       )
     end,
-  })
+  }
 end
 
 -- Open help - prefer R.nvim when available, fall back to buffer display
@@ -350,7 +353,7 @@ local function open_help(entry)
       end
 
       -- Create a new buffer for the help
-      vim.cmd('split')
+      vim.cmd 'split'
       local buf = vim.api.nvim_create_buf(false, true)
       vim.api.nvim_win_set_buf(0, buf)
 
@@ -406,10 +409,10 @@ M.r_help = function(opts)
     pickers
       .new(opts, {
         prompt_title = 'R Documentation',
-        finder = finders.new_table({
+        finder = finders.new_table {
           results = index,
           entry_maker = make_entry_maker(opts),
-        }),
+        },
         sorter = conf.generic_sorter(opts),
         previewer = make_previewer(),
         attach_mappings = function(prompt_bufnr, map)
@@ -472,7 +475,9 @@ end
 
 -- Pre-build index (can be called anytime)
 M.prebuild_index = function()
-  if help_index then return end
+  if help_index then
+    return
+  end
   -- Try disk cache first
   local cached = load_cached_index()
   if cached then
@@ -482,7 +487,7 @@ M.prebuild_index = function()
   build_index(function(_) end)
 end
 
-return require('telescope').register_extension({
+return require('telescope').register_extension {
   setup = function(ext_config)
     -- Optional: auto-build index on VimEnter
     if ext_config and ext_config.auto_build then
@@ -500,4 +505,4 @@ return require('telescope').register_extension({
     clear_cache = M.clear_cache,
     prebuild_index = M.prebuild_index,
   },
-})
+}

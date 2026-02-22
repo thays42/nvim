@@ -47,23 +47,23 @@ return {
           -- 'RDSendLine',       -- <LocalLeader>d
           -- 'RSendSelection',   -- <LocalLeader>ss
           -- 'RDSendSelection',  -- <LocalLeader>sd
-          'RSendParagraph',      -- <LocalLeader>pp (disable - rarely used)
-          'RDSendParagraph',     -- <LocalLeader>pd (disable - rarely used)
-          'RSendChain',          -- <LocalLeader>sc (disable unless you use pipes heavily)
-          'RSendCurrentFun',     -- <LocalLeader>fc
-          'RDSendCurrentFun',    -- <LocalLeader>fd
-          'RSendAllFun',         -- <LocalLeader>fa (disable - rarely needed)
-          'RSendFile',           -- <LocalLeader>aa (disable - rarely used)
-          'RSendAboveLines',     -- <LocalLeader>su (disable - rarely used)
-          'RSendMotion',         -- <LocalLeader>m (disable - complex)
-          'RSendMBlock',         -- <LocalLeader>bb (disable - rarely used)
-          'RDSendMBlock',        -- <LocalLeader>bd (disable - rarely used)
-          'RNLeftPart',          -- <LocalLeader>r<left> (disable)
-          'RNRightPart',         -- <LocalLeader>r<right> (disable)
-          'RILeftPart',          -- Insert mode (disable)
-          'RIRightPart',         -- Insert mode (disable)
+          'RSendParagraph', -- <LocalLeader>pp (disable - rarely used)
+          'RDSendParagraph', -- <LocalLeader>pd (disable - rarely used)
+          'RSendChain', -- <LocalLeader>sc (disable unless you use pipes heavily)
+          'RSendCurrentFun', -- <LocalLeader>fc
+          'RDSendCurrentFun', -- <LocalLeader>fd
+          'RSendAllFun', -- <LocalLeader>fa (disable - rarely needed)
+          'RSendFile', -- <LocalLeader>aa (disable - rarely used)
+          'RSendAboveLines', -- <LocalLeader>su (disable - rarely used)
+          'RSendMotion', -- <LocalLeader>m (disable - complex)
+          'RSendMBlock', -- <LocalLeader>bb (disable - rarely used)
+          'RDSendMBlock', -- <LocalLeader>bd (disable - rarely used)
+          'RNLeftPart', -- <LocalLeader>r<left> (disable)
+          'RNRightPart', -- <LocalLeader>r<right> (disable)
+          'RILeftPart', -- Insert mode (disable)
+          'RIRightPart', -- Insert mode (disable)
           'RSendLAndOpenNewOne', -- (disable - confusing)
-          'RInsertLineOutput',   -- <LocalLeader>o (disable - rarely used)
+          'RInsertLineOutput', -- <LocalLeader>o (disable - rarely used)
 
           -- Chunk operations (only useful for Rmd/Quarto)
           'RSendChunk',
@@ -73,7 +73,7 @@ return {
           'RPreviousRChunk',
 
           -- R CMD operations (most people use devtools instead)
-          'RShowRout',           -- <LocalLeader>ao
+          'RShowRout', -- <LocalLeader>ao
 
           -- Knit/Weave (if you don't use Rmd/Rnw)
           'RKnit',
@@ -102,14 +102,14 @@ return {
 
           -- Insert operations (some are useful, keep what you like)
           -- 'RInsertAssign',    -- Alt+- for <-
-          'RInsertPipe',         -- <LocalLeader>, for |> (use snippets instead)
+          'RInsertPipe', -- <LocalLeader>, for |> (use snippets instead)
           'RmdInsertChunk',
           'RnwInsertChunk',
 
           -- Format operations (rarely used)
-          'RFormatNumbers',      -- <LocalLeader>cn
-          'RFormatSubsetting',   -- <LocalLeader>cs
-          'RSeparatePath',       -- <LocalLeader>sp
+          'RFormatNumbers', -- <LocalLeader>cn
+          'RFormatSubsetting', -- <LocalLeader>cs
+          'RSeparatePath', -- <LocalLeader>sp
 
           -- Commands (keep the useful ones)
           -- 'RHelp',            -- <LocalLeader>rh
@@ -117,13 +117,13 @@ return {
           -- 'RObjectStr',       -- <LocalLeader>rt
           -- 'RSummary',         -- <LocalLeader>rs
           -- 'RPlot',            -- <LocalLeader>rg
-          'RSPlot',              -- <LocalLeader>rb (disable - redundant)
-          'RShowArgs',           -- <LocalLeader>ra (disable - LSP shows this)
-          'RObjectNames',        -- <LocalLeader>rn (disable - rarely used)
-          'RListSpace',          -- <LocalLeader>rl (disable - use object browser)
-          'RClearAll',           -- <LocalLeader>rm (dangerous - disable)
-          'RClearConsole',       -- <LocalLeader>rr (disable - Ctrl+L works)
-          'RSetwd',              -- <LocalLeader>rd (disable - use .Rproj)
+          'RSPlot', -- <LocalLeader>rb (disable - redundant)
+          'RShowArgs', -- <LocalLeader>ra (disable - LSP shows this)
+          'RObjectNames', -- <LocalLeader>rn (disable - rarely used)
+          'RListSpace', -- <LocalLeader>rl (disable - use object browser)
+          'RClearAll', -- <LocalLeader>rm (dangerous - disable)
+          'RClearConsole', -- <LocalLeader>rr (disable - Ctrl+L works)
+          'RSetwd', -- <LocalLeader>rd (disable - use .Rproj)
 
           -- Debug operations
           -- 'RDebug',              -- <LocalLeader>bg
@@ -131,16 +131,16 @@ return {
 
           -- Data viewing (keep if useful)
           -- 'RViewDF',          -- <LocalLeader>rv
-          'RDputObj',            -- <LocalLeader>td (disable - rarely used)
-          'RShowEx',             -- <LocalLeader>re (disable - rarely used)
+          'RDputObj', -- <LocalLeader>td (disable - rarely used)
+          'RShowEx', -- <LocalLeader>re (disable - rarely used)
 
           -- Object Browser
           -- 'ROBToggle',        -- <LocalLeader>ro
-          'ROBOpenLists',        -- <LocalLeader>r= (disable - object browser does this)
-          'ROBCloseLists',       -- <LocalLeader>r- (disable - object browser does this)
+          'ROBOpenLists', -- <LocalLeader>r= (disable - object browser does this)
+          'ROBCloseLists', -- <LocalLeader>r- (disable - object browser does this)
 
           -- Package operations (disable - use custom devtools commands below)
-          'RPackages',           -- <LocalLeader>ip
+          'RPackages', -- <LocalLeader>ip
         },
 
         -- Object browser mappings
@@ -160,7 +160,7 @@ return {
       vim.api.nvim_create_autocmd('TermClose', {
         callback = function(args)
           local bufname = vim.api.nvim_buf_get_name(args.buf)
-          if bufname:match('csvlens') and vim.v.event.status == 0 then
+          if bufname:match 'csvlens' and vim.v.event.status == 0 then
             vim.api.nvim_buf_delete(args.buf, { force = true })
           end
         end,
@@ -235,7 +235,7 @@ return {
           -- ====================================================================
 
           rmap('<localleader>rT', function()
-            require('r.send').cmd('devtools::test()')
+            require('r.send').cmd 'devtools::test()'
           end, 'devtools::test()')
 
           rmap('<localleader>rt', function()
@@ -244,11 +244,11 @@ return {
           end, 'devtools::test_file()')
 
           rmap('<localleader>rd', function()
-            require('r.send').cmd('devtools::document()')
+            require('r.send').cmd 'devtools::document()'
           end, 'devtools::document()')
 
           rmap('<localleader>rl', function()
-            require('r.send').cmd('devtools::load_all()')
+            require('r.send').cmd 'devtools::load_all()'
           end, 'devtools::load_all()')
 
           -- ====================================================================
