@@ -1,0 +1,150 @@
+## General @general @basics
+Write file | <leader>w
+Save and close | <leader>x
+Toggle to last window | <leader>;
+Toggle window zoom | <leader>z
+Clear search highlight | <Esc>
+Escape insert mode | jk
+
+## Navigation @nav @movement
+Move focus left | <C-h>
+Move focus down | <C-j>
+Move focus up | <C-k>
+Move focus right | <C-l>
+Scroll down centered | <C-d>
+Scroll up centered | <C-u>
+Flash jump | s
+Flash treesitter select | S
+Previous diagnostic | [d
+Next diagnostic | ]d
+
+## File Search @telescope @search
+Search files | <leader>sf
+Search by grep | <leader>sg
+Search current word | <leader>sw
+Search recent files | <leader>s.
+Find existing buffers | <leader><leader>
+Fuzzy search in buffer | <leader>/
+Search in open files | <leader>s/
+
+## Help @help @discovery
+Search help | <leader>sh
+Search keymaps | <leader>sk
+Search Telescope builtins | <leader>ss
+Search diagnostics | <leader>sd
+Resume last search | <leader>sr
+Search Neovim config files | <leader>sn
+Search TODOs | <leader>st
+
+## LSP @lsp @code
+Go to definition | grd
+Go to declaration | grD
+Go to references | grr
+Go to implementation | gri
+Go to type definition | grt
+Document symbols | gO
+Workspace symbols | gW
+Rename symbol | grn
+Code action | gra
+
+## Git @git @vcs
+Stage hunk | <leader>hs
+Reset hunk | <leader>hr
+Stage buffer | <leader>hS
+Undo stage hunk | <leader>hu
+Reset buffer | <leader>hR
+Preview hunk | <leader>hp
+Blame line | <leader>hb
+Diff against index | <leader>hd
+Diff against last commit | <leader>hD
+Toggle blame | <leader>tb
+Toggle deleted | <leader>td
+
+## Text Objects @textobj @selection
+Around function | af
+Inside function | if
+Around class | ac
+Inside class | ic
+Around argument | aa
+Inside argument | ia
+Around if | ai
+Inside if | ii
+Around loop | al
+Inside loop | il
+
+## Treesitter @treesitter @nav
+Next function start | ]f
+Previous function start | [f
+Next function end | ]F
+Previous function end | [F
+Next class start | ]c
+Previous class start | [c
+Next argument | ]a
+Previous argument | [a
+Start node selection | gnn
+Expand selection | +
+Shrink selection | -
+
+## Editing @edit
+Move line down | <A-j>
+Move line up | <A-k>
+Indent left (stay visual) | <
+Indent right (stay visual) | >
+Join lines (keep cursor) | J
+Swap with next argument | <leader>a
+Swap with prev argument | <leader>A
+Undo tree | <leader>u
+
+## Sessions @session @persistence
+Load session (cwd) | <leader>ps
+Select session | <leader>pS
+Load last session | <leader>pl
+Don't save on exit | <leader>pd
+
+## R Console @r @rstats @console
+Start R console | \rf
+Quit R console | \rq
+Send line/selection to R | <Enter>
+
+## R Object Inspection @r @rstats @objects
+Toggle object browser | \ro
+View data frame | \rv
+Print object | \rp
+R help | \rh
+
+## R Debugging @r @rstats @debug
+debug() function | \bg
+undebug() function | \ud
+List variables (ls) | \dl
+List with structure (ls.str) | \de
+Show call stack (where) | \dw
+
+## R Package Development @r @rstats @devtools
+devtools::test() | \rT
+devtools::test_file() | \rt
+devtools::document() | \rd
+devtools::load_all() | \rl
+
+## R Object Browser @r @rstats @objbrowser
+class() in object browser | c
+View() in object browser | v
+str() in object browser | s
+head(n=15) in object browser | \gg
+tail(n=15) in object browser | \gt
+print() in object browser | \p
+
+## Testing @test @neotest
+Run nearest test | <leader>tt
+Run file tests | <leader>tf
+Run all tests | <leader>ta
+Toggle test summary | <leader>ts
+Show test output | <leader>to
+Toggle output panel | <leader>tO
+Toggle watch mode | <leader>tw
+Run last test | <leader>tl
+Toggle coverage signs | <leader>tc
+Coverage summary | <leader>tC
+Generate R coverage | <leader>tg
+Next uncovered line | ]u
+Previous uncovered line | [u
+Function coverage picker | <leader>tu
