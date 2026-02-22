@@ -73,5 +73,14 @@ return {
     map('n', '<leader>sm', function()
       require('telescope').extensions.heading.heading()
     end, { desc = '[S]earch [M]arkdown headings' })
+
+    -- Review thread search
+    map('n', '<leader>sv', function()
+      builtin.grep_string {
+        search = '<!--REVIEW:open',
+        glob_pattern = '*.md',
+        prompt_title = 'Open Review Threads',
+      }
+    end, { desc = '[S]earch Re[V]iew threads' })
   end,
 }

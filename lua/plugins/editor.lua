@@ -160,6 +160,7 @@ return {
         { '<leader>d', group = '[D]ebug' },
         { '<leader>l', group = '[L]SP' },
         { '<leader>p', group = '[P]ersistence' },
+        { '<leader>r', group = '[R]eview' },
       },
     },
   },

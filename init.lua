@@ -32,3 +32,6 @@ require('lazy').setup('plugins', {
 
 -- Load LSP configuration (after plugins so lspconfig is available)
 require 'lsp'
+
+-- Load review comment system for markdown files
+require 'review'
