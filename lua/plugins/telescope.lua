@@ -69,9 +69,54 @@ return {
       require('telescope').extensions.r_help.r_help()
     end, { desc = '[S]earch [R] documentation' })
 
-    -- Markdown heading search
+    -- Markdown heading search (outline-style, document order)
     map('n', '<leader>sm', function()
-      require('telescope').extensions.heading.heading()
+      local pickers = require 'telescope.pickers'
+      local finders = require 'telescope.finders'
+      local sorters = require 'telescope.sorters'
+      local actions = require 'telescope.actions'
+      local actions_state = require 'telescope.actions.state'
+      local conf = require('telescope.config').values
+
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      local headings = {}
+      local in_code_block = false
+      for i, line in ipairs(lines) do
+        if line:match '^```' then
+          in_code_block = not in_code_block
+        elseif not in_code_block and line:match '^#+ ' then
+          table.insert(headings, { heading = vim.trim(line), lnum = i })
+        end
+      end
+
+      pickers
+        .new({ sorting_strategy = 'ascending' }, {
+          prompt_title = 'Headings',
+          results_title = 'Headings',
+          finder = finders.new_table {
+            results = headings,
+            entry_maker = function(entry)
+              return {
+                value = entry.lnum,
+                display = entry.heading,
+                ordinal = string.format('%05d %s', entry.lnum, entry.heading),
+                lnum = entry.lnum,
+                filename = vim.api.nvim_buf_get_name(0),
+              }
+            end,
+          },
+          sorter = sorters.get_generic_fuzzy_sorter(),
+          previewer = conf.grep_previewer {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              local entry = actions_state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              vim.cmd(string.format('%d', entry.value))
+            end)
+            return true
+          end,
+        })
+        :find()
     end, { desc = '[S]earch [M]arkdown headings' })
 
     -- Review thread search
