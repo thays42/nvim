@@ -20,6 +20,22 @@ return {
           LineNr = { bg = '#000000' },
           CursorLineNr = { bg = '#000000' },
           FoldColumn = { bg = '#000000' },
+          -- Markdown: tone down highlights for dark background
+          ['@markup.raw'] = { fg = '#a89984', bg = 'NONE' }, -- Inline code: muted fg, no bg
+          ['@markup.raw.block'] = { bg = 'NONE' }, -- Code block content: no bg (render-markdown handles it)
+          ['@markup.raw.delimiter'] = { fg = '#504945' }, -- ``` fences: very dim
+          ['@markup.heading.1'] = { fg = '#d79921', bold = true }, -- Muted yellow
+          ['@markup.heading.2'] = { fg = '#98971a', bold = true }, -- Muted green
+          ['@markup.heading.3'] = { fg = '#689d6a', bold = true }, -- Muted aqua
+          ['@markup.heading.4'] = { fg = '#a89984', bold = true }, -- Gray
+          ['@markup.heading.5'] = { fg = '#a89984' },
+          ['@markup.heading.6'] = { fg = '#7c6f64' },
+          ['@markup.link'] = { fg = '#689d6a' }, -- Muted aqua for links
+          ['@markup.link.url'] = { fg = '#504945', underline = true }, -- Very dim URLs
+          ['@markup.list'] = { fg = '#7c6f64' }, -- Dim list markers
+          ['@markup.italic'] = { fg = '#bdae93', italic = true },
+          ['@markup.strong'] = { fg = '#d5c4a1', bold = true },
+          ['@markup.quote'] = { fg = '#7c6f64', italic = true }, -- Dim blockquotes
         },
       }
       vim.cmd.colorscheme 'gruvbox'
