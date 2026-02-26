@@ -4,18 +4,47 @@ local function today()
   return os.date '%Y-%m-%d'
 end
 
---- Insert a new open review block at the cursor.
+--- Find the review block enclosing the cursor, if any.
+--- Returns (open_line, close_line) 1-indexed, or nil if not inside a block.
+local function enclosing_block()
+  local cur = vim.api.nvim_win_get_cursor(0)[1]
+  local open_line = vim.fn.search('<!--REVIEW:', 'bnWc')
+  if open_line == 0 then
+    return nil
+  end
+  -- Search for closing --> from the open tag line
+  local saved = vim.api.nvim_win_get_cursor(0)
+  vim.api.nvim_win_set_cursor(0, { open_line, 0 })
+  local close_line = vim.fn.search('^-->$', 'nW')
+  vim.api.nvim_win_set_cursor(0, saved)
+  if close_line == 0 or cur > close_line then
+    return nil
+  end
+  return open_line, close_line
+end
+
+--- Insert a new review note. If inside an existing thread, append to it.
+--- Otherwise create a new thread.
 function M.new()
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  local date = today()
-  vim.api.nvim_buf_set_lines(0, row, row, false, {
-    '<!--REVIEW:open ' .. date,
-    '',
-    '-->',
-  })
-  -- Position cursor on the blank line and enter insert mode
-  vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
-  vim.cmd 'startinsert'
+  local open_line, close_line = enclosing_block()
+  if open_line and close_line then
+    -- Append a new note before the closing -->
+    vim.api.nvim_buf_set_lines(0, close_line - 1, close_line - 1, false, {
+      '@thays: ',
+    })
+    vim.api.nvim_win_set_cursor(0, { close_line, 8 })
+    vim.cmd 'startinsert!'
+  else
+    local row = vim.api.nvim_win_get_cursor(0)[1]
+    local date = today()
+    vim.api.nvim_buf_set_lines(0, row, row, false, {
+      '<!--REVIEW:open ' .. date,
+      '@thays: ',
+      '-->',
+    })
+    vim.api.nvim_win_set_cursor(0, { row + 2, 8 })
+    vim.cmd 'startinsert!'
+  end
 end
 
 --- Grep for open review threads and populate the quickfix list.
@@ -103,6 +132,21 @@ vim.api.nvim_create_user_command('ReviewPrev', 'cprev', { desc = 'Previous revie
 vim.api.nvim_create_user_command('ReviewResolve', M.resolve, { desc = 'Resolve enclosing review block' })
 vim.api.nvim_create_user_command('ReviewClear', M.clear, { desc = 'Remove closed reviews from buffer' })
 vim.api.nvim_create_user_command('ReviewClearAll', M.clear_all, { desc = 'Remove closed reviews from all md files' })
+
+-- Highlighting
+vim.api.nvim_set_hl(0, 'ReviewBlock', { fg = '#d3869b' }) -- gruvbox hard purple
+vim.api.nvim_set_hl(0, 'ReviewThays', { fg = '#458588' }) -- gruvbox hard blue
+vim.api.nvim_set_hl(0, 'ReviewClaude', { fg = '#d65d0e' }) -- gruvbox hard orange
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'markdown',
+  callback = function()
+    vim.fn.matchadd('ReviewBlock', '<!--REVIEW:\\S\\+.*')
+    vim.fn.matchadd('ReviewBlock', '^-->$')
+    vim.fn.matchadd('ReviewThays', '@thays:')
+    vim.fn.matchadd('ReviewClaude', '@claude:')
+  end,
+})
 
 -- Keymaps
 local map = vim.keymap.set

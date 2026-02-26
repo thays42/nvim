@@ -174,15 +174,43 @@ Custom local adapters (in `lua/`):
 - Inline rendering with render-markdown.nvim (`<leader>tm` to toggle)
 - Follow links with follow-md-links.nvim
 - Search headings with `<leader>sm`
-- **Review comments:** A custom review system (`lua/review.lua`) for embedding review threads in markdown files as HTML comments
+- **Review threads:** A custom review system (`lua/review.lua`) for embedding authored review threads in markdown files as HTML comments. Threads are identified by the `<!--REVIEW:` prefix (distinct from regular HTML comments) and contain `@thays:` / `@claude:` authored notes:
+
+  ```html
+  <!--REVIEW:open 2026-02-26
+  @thays: This section needs a clearer explanation
+  @claude: Agreed, a pros/cons list would help
+  @thays: Let's do that
+  -->
+  ```
+
+  `@thays:` tags are highlighted blue, `@claude:` tags orange, and block markers purple.
+
+  **CLAUDE.md snippet** — add this to projects where you use review threads so Claude follows the convention:
+
+  ```markdown
+  ## Review Notes
+
+  Review threads are HTML comments prefixed with `<!--REVIEW:`. They are distinct from regular HTML comments.
+
+  <!--REVIEW:open 2026-02-26
+  @thays: question or comment
+  @claude: response
+  -->
+
+  - `@thays:` = human notes, `@claude:` = your notes
+  - When responding to a review thread, append a `@claude:` line before the closing `-->`
+  - Do not modify or remove `@thays:` lines
+  - Do not resolve threads (change `open` to `closed`) unless asked
+  ```
 
 | Key | Action |
 |-----|--------|
-| `<leader>rn` | New review block at cursor |
-| `<leader>rl` | List open reviews (quickfix) |
-| `<leader>rr` | Resolve review under cursor |
-| `<leader>rc` | Clear resolved reviews from buffer |
-| `<leader>rC` | Clear resolved reviews from all .md files |
+| `<leader>rn` | New review note (creates thread or appends to existing) |
+| `<leader>rl` | List open review threads (quickfix) |
+| `<leader>rr` | Resolve review thread under cursor |
+| `<leader>rc` | Clear resolved threads from buffer |
+| `<leader>rC` | Clear resolved threads from all .md files |
 | `]r` / `[r` | Next/previous review thread |
 | `<leader>sv` | Search open review threads (Telescope) |
 
