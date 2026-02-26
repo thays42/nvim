@@ -60,12 +60,12 @@ end
 
 --- List open review threads.
 function M.list_open()
-  list_threads '<!--REVIEW:open'
+  list_threads '^<!--REVIEW:open'
 end
 
 --- List all review threads (open and closed).
 function M.list()
-  list_threads '<!--REVIEW:'
+  list_threads '^<!--REVIEW:'
 end
 
 --- Resolve the review block enclosing the cursor (open -> closed).
