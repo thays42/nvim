@@ -47,10 +47,25 @@ function M.new()
   end
 end
 
---- Grep for open review threads and populate the quickfix list.
+--- Grep for review threads and populate the quickfix list.
+--- @param pattern string vimgrep pattern to search for
+local function list_threads(pattern)
+  local ok = pcall(vim.cmd, 'vimgrep /' .. pattern .. '/j **/*.md')
+  if ok then
+    vim.cmd 'copen'
+  else
+    vim.notify('No review threads found', vim.log.levels.INFO)
+  end
+end
+
+--- List open review threads.
+function M.list_open()
+  list_threads '<!--REVIEW:open'
+end
+
+--- List all review threads (open and closed).
 function M.list()
-  vim.cmd 'vimgrep /<!--REVIEW:open/j **/*.md'
-  vim.cmd 'copen'
+  list_threads '<!--REVIEW:'
 end
 
 --- Resolve the review block enclosing the cursor (open -> closed).
@@ -126,7 +141,8 @@ end
 
 -- Commands
 vim.api.nvim_create_user_command('ReviewNew', M.new, { desc = 'Insert new review block' })
-vim.api.nvim_create_user_command('ReviewList', M.list, { desc = 'List open review threads in quickfix' })
+vim.api.nvim_create_user_command('ReviewList', M.list, { desc = 'List all review threads in quickfix' })
+vim.api.nvim_create_user_command('ReviewListOpen', M.list_open, { desc = 'List open review threads in quickfix' })
 vim.api.nvim_create_user_command('ReviewNext', 'cnext', { desc = 'Next review thread' })
 vim.api.nvim_create_user_command('ReviewPrev', 'cprev', { desc = 'Previous review thread' })
 vim.api.nvim_create_user_command('ReviewResolve', M.resolve, { desc = 'Resolve enclosing review block' })
@@ -151,7 +167,8 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Keymaps
 local map = vim.keymap.set
 map('n', '<leader>rn', M.new, { desc = '[R]eview [N]ew' })
-map('n', '<leader>rl', M.list, { desc = '[R]eview [L]ist' })
+map('n', '<leader>rl', M.list, { desc = '[R]eview [L]ist all' })
+map('n', '<leader>ro', M.list_open, { desc = '[R]eview [O]pen threads' })
 map('n', ']r', '<cmd>cnext<CR>', { desc = 'Next review thread' })
 map('n', '[r', '<cmd>cprev<CR>', { desc = 'Previous review thread' })
 map('n', '<leader>rr', M.resolve, { desc = '[R]eview [R]esolve' })
