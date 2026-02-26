@@ -15,7 +15,7 @@ local function enclosing_block()
   -- Search for closing --> from the open tag line
   local saved = vim.api.nvim_win_get_cursor(0)
   vim.api.nvim_win_set_cursor(0, { open_line, 0 })
-  local close_line = vim.fn.search('^-->$', 'nW')
+  local close_line = vim.fn.search('^\\s*-->\\s*$', 'nW')
   vim.api.nvim_win_set_cursor(0, saved)
   if close_line == 0 or cur > close_line then
     return nil
@@ -76,7 +76,7 @@ function M.resolve()
     return
   end
   local text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
-  local new_text = text:gsub('<!--REVIEW:open', '<!--REVIEW:closed')
+  local new_text = text:gsub('<!%-%-%s*REVIEW:open', '<!--REVIEW:closed')
   vim.api.nvim_buf_set_lines(0, line - 1, line, false, { new_text })
   vim.notify('Review resolved', vim.log.levels.INFO)
 end
@@ -89,10 +89,10 @@ function M.clear()
   local removed = 0
 
   for _, line in ipairs(lines) do
-    if not skipping and line:match '<!--REVIEW:closed' then
+    if not skipping and line:match '<!%-%- *REVIEW:closed' then
       skipping = true
       removed = removed + 1
-    elseif skipping and line:match '^%-%->' then
+    elseif skipping and line:match '%-%->' then
       skipping = false
     elseif not skipping then
       table.insert(result, line)
@@ -120,10 +120,10 @@ function M.clear_all()
     local removed = 0
 
     for _, line in ipairs(content) do
-      if not skipping and line:match '<!--REVIEW:closed' then
+      if not skipping and line:match '<!%-%- *REVIEW:closed' then
         skipping = true
         removed = removed + 1
-      elseif skipping and line:match '^%-%->' then
+      elseif skipping and line:match '%-%->' then
         skipping = false
       elseif not skipping then
         table.insert(result, line)
