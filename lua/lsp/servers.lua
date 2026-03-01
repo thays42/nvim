@@ -67,14 +67,26 @@ return {
   -- Add more servers here as needed:
   --
   -- Python (pyright):
-  --   Install: pacman -S pyright
   --   pyright = {},
   --
   -- TypeScript (ts_ls):
-  --   Install: npm install -g typescript typescript-language-server
   --   ts_ls = {},
   --
-  -- Rust (rust_analyzer):
-  --   Install: pacman -S rust-analyzer
-  --   rust_analyzer = {},
+  -- Rust
+  -- Install: pacman -S rust-analyzer
+  rust_analyzer = {
+    cmd = { 'rust-analyzer' },
+    filetypes = { 'rust' },
+    root_markers = { 'Cargo.toml', 'rust-project.json' },
+    settings = {
+      ['rust-analyzer'] = {
+        check = {
+          command = 'clippy',
+        },
+        cargo = {
+          allFeatures = true,
+        },
+      },
+    },
+  },
 }

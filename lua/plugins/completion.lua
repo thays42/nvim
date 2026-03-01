@@ -112,6 +112,7 @@ return {
         lua = { 'stylua' },
         go = { 'gofmt', 'goimports' },
         r = { 'air' },
+        rust = { 'rustfmt' },
       },
       formatters = {
         air = {
