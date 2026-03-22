@@ -14,7 +14,7 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 | Gruvbox Theme | `jdinhlife.gruvbox` | gruvbox.nvim |
 | Todo Tree | `gruntfuggly.todo-tree` | todo-comments.nvim |
 | GitLens | `eamodio.gitlens` | gitsigns.nvim |
-| Error Lens | `usernameheo.errorlens` | diagnostics virtual_text |
+| Error Lens | `usernamehw.errorlens` | diagnostics virtual_text |
 | Go | `golang.go` | gopls config |
 | rust-analyzer | `rust-lang.rust-analyzer` | rust-analyzer config |
 | Markdown All in One | `yzhang.markdown-all-in-one` | markdown plugins |
@@ -44,9 +44,11 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 
 - `vim.leader`: `<space>`
 - `vim.easymotion`: true (replaces flash.nvim `s` jump)
-- `vim.surround`: true (replaces mini.surround)
+- `vim.surround`: true (replaces mini.surround — note: uses `ys`/`ds`/`cs` keybindings, not mini.surround's `sa`/`sd`/`sr`)
 - `vim.highlightedyank.enable`: true (replaces TextYankPost autocmd)
 - `vim.hlsearch`: true
+- `vim.ignorecase`: true
+- `vim.smartcase`: true
 - `vim.useSystemClipboard`: true (replaces `clipboard = 'unnamedplus'`)
 - `vim.insertModeKeyBindings`: `jk` → `<Esc>`
 
@@ -62,11 +64,14 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 - `<leader>sw` → search word under cursor in files
 - `<leader>sd` → workbench.actions.view.problems (diagnostics)
 - `<leader>s.` → workbench.action.openRecent (recent files)
+- `<leader>sk` → workbench.action.openGlobalKeybindings (search keymaps)
+- `<leader>st` → todo-tree-view.focus (search TODOs via Todo Tree)
 - `<leader><leader>` → workbench.action.showAllEditors (buffers)
 - `<leader>/` → actions.find (find in current file)
 
 **LSP (gr namespace):**
 - `grd` → editor.action.revealDefinition
+- `grD` → editor.action.revealDeclaration
 - `grr` → editor.action.goToReferences
 - `gri` → editor.action.goToImplementation
 - `grt` → editor.action.goToTypeDefinition
@@ -83,13 +88,19 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 **Git (via GitLens):**
 - `[c` → workbench.action.editor.previousChange
 - `]c` → workbench.action.editor.nextChange
+- `<leader>tb` → gitlens.toggleLineBlame (toggle inline blame)
 
 **Editing:**
 - `J` → join lines keeping cursor position (via marks)
 - `<C-d>` → half-page down + `zz` (center)
 - `<C-u>` → half-page up + `zz` (center)
-- `s` → EasyMotion jump (flash equivalent)
-- `-` → workbench.action.toggleSidebarVisibility + explorer focus
+- `s` → EasyMotion jump (requires explicit binding: `"before": ["s"]` → `"after": ["leader", "leader", "s"]`)
+- `-` → revealInExplorer (overrides Vim's line-up; same tradeoff as oil.nvim override in Neovim config)
+- `<Esc>` → `:nohl` (clear search highlights)
+
+**Toggles:**
+- `<leader>th` → editor.action.toggleInlayHints (toggle inlay hints)
+- `<leader>tb` → gitlens.toggleLineBlame (toggle git blame)
 
 ### VSCodeVim visualModeKeyBindingsNonRecursive
 
@@ -115,7 +126,7 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 
 ## keybindings.json
 
-### Panel/Sidebar Navigation (Ctrl+h/j/k/l)
+### Panel/Sidebar Navigation (Ctrl+h/j/Ctrl+Shift+j/l)
 
 **Ctrl+h — Primary sidebar toggle/focus:**
 - Sidebar hidden → open + focus
@@ -131,11 +142,13 @@ Generate VSCode config files (`settings.json`, `keybindings.json`) and a referen
 - Sidebar focused → focus terminal (open if needed)
 - Terminal focused → maximize panel
 
-**Ctrl+k — Navigate "up" toward editor:**
+**Ctrl+Shift+j — Navigate "up" toward editor (replaces Ctrl+k to avoid VSCode chord conflicts):**
 - Terminal focused, panel maximized → unmaximize
 - Terminal focused, panel normal → focus editor
 - Sidebar focused → focus editor
 - Editor focused → hide bottom panel
+
+Note: All Ctrl+h/j/l bindings need `when` clauses to avoid conflicting with VSCodeVim insert mode. Ctrl+h in normal mode overrides Vim's cursor-left (use `h` instead).
 
 ### Other Keybindings
 
@@ -149,18 +162,43 @@ A markdown document covering:
 2. **Search** — live_grep → Ctrl+Shift+F, grep_string → search word
 3. **LSP** — gr* mappings, hover, peek, rename
 4. **Git** — gitsigns → GitLens gutter, Source Control panel
-5. **Editing** — surround, EasyMotion, line moves, indent
-6. **Terminal** — Ctrl+j/k workflow
+5. **Editing** — surround (`ys`/`ds`/`cs` not `sa`/`sd`/`sr`), EasyMotion, line moves, indent
+6. **Terminal** — Ctrl+j / Ctrl+Shift+j workflow
 7. **Sidebars** — Ctrl+h/l workflow
-8. **Things that work differently** — treesitter textobjects (gone), oil.nvim (Explorer), which-key (leader hints)
-9. **VSCode-native features worth learning** — multi-cursor (Ctrl+D, Ctrl+Shift+L), peek definition, breadcrumbs, Zen mode
+8. **Things that work differently** — treesitter textobjects (gone), oil.nvim (Explorer), which-key (leader hints), surround keybinding change
+9. **VSCode-native features worth learning** — multi-cursor (Ctrl+D, Ctrl+Shift+L), peek definition, breadcrumbs, Zen mode, Shift+Alt+Right expand selection (partial treesitter textobject replacement)
 
-## Not Ported (No Equivalent)
+## Not Ported (No Equivalent or Not Applicable)
 
-- Treesitter textobjects (`af`, `if`, `ac`, `ic`, etc.)
-- Incremental selection (`+`/`-`)
-- Argument swap (`<leader>a`/`A`)
-- Oil.nvim filesystem-as-buffer editing
-- Flash treesitter select (`S`)
-- Session persistence (VSCode handles this natively)
-- Window zoom (`<leader>z`)
+**Treesitter features:**
+- Textobjects (`af`, `if`, `ac`, `ic`, `aa`, `ia`, `ai`, `ii`, `al`, `il`) — no VSCode equivalent; use Shift+Alt+Right/Left for expand/shrink selection as partial mitigation
+- Incremental selection (`+`/`-`) — replaced by Shift+Alt+Right/Left
+- Argument swap (`<leader>a`/`A`) — no equivalent
+- Flash treesitter select (`S`) — no equivalent
+
+**Search bindings (no direct equivalent):**
+- `<leader>sh` (help tags) — not applicable in VSCode
+- `<leader>ss` (telescope builtins) — not applicable
+- `<leader>sr` (search resume) — no equivalent
+- `<leader>s/` (search in open files) — can use Ctrl+Shift+F with "files to include" filter manually
+- `<leader>sn` (search Neovim config) — not applicable post-transition
+
+**Git hunk actions (use Source Control panel / GitLens gutter instead):**
+- `<leader>hs` / `<leader>hS` (stage hunk/buffer) — use Source Control panel or GitLens inline gutter actions
+- `<leader>hr` / `<leader>hR` (reset hunk/buffer) — use Source Control panel
+- `<leader>hu` (undo stage hunk) — use Source Control panel
+- `<leader>hp` (preview hunk) — GitLens shows inline; also hover gutter decorations
+- `<leader>hb` (blame line) — replaced by `<leader>tb` toggle
+- `<leader>hd` / `<leader>hD` (diff against index/commit) — use GitLens diff commands via command palette
+- `<leader>tD` (toggle deleted lines) — no GitLens equivalent
+
+**Window/navigation:**
+- `<leader>z` (window zoom) — no clean equivalent; use Zen mode (Ctrl+K Z) for distraction-free
+- `<leader>;` (toggle last window) — use Ctrl+Tab for recent editor
+- `<leader>-` (open cwd in Oil) — use Explorer sidebar
+- `<leader>gg` (LazyGit) — replaced by Source Control panel
+
+**Other:**
+- Session persistence — VSCode handles natively
+- Oil.nvim filesystem-as-buffer editing — use Explorer sidebar
+- `<Esc><Esc>` terminal escape — VSCode terminal uses Ctrl+Shift+` to toggle; Ctrl+Shift+j to focus editor
