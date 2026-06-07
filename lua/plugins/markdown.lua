@@ -11,6 +11,10 @@ return {
       { '<leader>tm', '<cmd>RenderMarkdown toggle<CR>', desc = '[T]oggle [M]arkdown rendering' },
     },
     opts = {
+      -- Obsidian-style: render in normal + visual, raw in insert
+      render_modes = { 'n', 'v', 'V', '\22', 'c' },
+      -- Keep the cursor line rendered too (don't reveal raw markup under cursor)
+      anti_conceal = { enabled = false },
       code = {
         style = 'full',
         background = 'normal', -- Use highlight group below instead of default
