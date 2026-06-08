@@ -8,22 +8,22 @@
 -- Open a bottom split running `cmd` (a list -- no shell quoting headaches),
 -- optionally with a working directory, and drop into terminal-insert.
 local function run_in_split(cmd, cwd)
-  vim.cmd('botright 15split | enew')
+  vim.cmd 'botright 15split | enew'
   vim.fn.jobstart(cmd, { term = true, cwd = cwd })
-  vim.cmd('startinsert')
+  vim.cmd 'startinsert'
 end
 
 -- <leader>Rl : run THIS file through luajit (love2d's runtime). cwd = file's
 -- dir so relative requires in scratch scripts resolve.
 vim.keymap.set('n', '<leader>Rl', function()
-  local file = vim.fn.expand('%:p')
-  run_in_split({ 'luajit', file }, vim.fn.expand('%:p:h'))
+  local file = vim.fn.expand '%:p'
+  run_in_split({ 'luajit', file }, vim.fn.expand '%:p:h')
 end, { buffer = true, desc = '[R]un: this file in [L]uajit' })
 
 -- <leader>Rb : run busted from THIS file's directory. cwd = file's dir so the
 -- local .busted config (lua=luajit, ROOT) and require("solution") both resolve.
 vim.keymap.set('n', '<leader>Rb', function()
-  run_in_split({ 'busted' }, vim.fn.expand('%:p:h'))
+  run_in_split({ 'busted' }, vim.fn.expand '%:p:h')
 end, { buffer = true, desc = '[R]un: [B]usted in this dir' })
 
 -- which-key group label (guarded -- ftplugin may load before which-key).
