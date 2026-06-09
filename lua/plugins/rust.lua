@@ -12,7 +12,7 @@ return {
   -- rust-analyzer wrapper with extra Rust-specific goodies
   {
     'mrcjkb/rustaceanvim',
-    version = '^5', -- v6+ requires Neovim 0.12; we're on 0.11
+    version = '^6', -- v6 requires Neovim 0.12
     lazy = false, -- the plugin handles its own lazy-loading on the rust filetype
     init = function()
       local ok_blink, blink = pcall(require, 'blink.cmp')

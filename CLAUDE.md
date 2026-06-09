@@ -60,7 +60,7 @@ Configured in `lua/plugins/rust.lua`.
 
 **LSP:** Managed by **rustaceanvim**, NOT `lua/lsp/servers.lua` — do not add `rust_analyzer` there, it would start twice and conflict. Settings (clippy on check, `allFeatures`) live in the `vim.g.rustaceanvim` table in `rust.lua`.
 
-**Version pin:** rustaceanvim is pinned to `^5`. v6+ requires Neovim 0.12; we're on 0.11. Bump the pin only after upgrading Neovim.
+**Version pin:** rustaceanvim is pinned to `^6` (requires Neovim 0.12+, which we're on). Bump the major to match if a future rustaceanvim raises its Neovim floor again.
 
 **Formatting:** rustfmt via conform.nvim with format-on-save.
 
