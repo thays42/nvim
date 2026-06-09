@@ -52,6 +52,35 @@ Add files to `lua/plugins/` returning a lazy.nvim spec table.
 1. Install via pacman (no Mason)
 2. Add to `lua/lsp/servers.lua` with `cmd`, `filetypes`, `root_markers`
 
+## Rust Development
+
+Configured in `lua/plugins/rust.lua`.
+
+**Toolchain:** Installed via rustup (`rustc`, `cargo`, `rustfmt`, `rust-analyzer`).
+
+**LSP:** Managed by **rustaceanvim**, NOT `lua/lsp/servers.lua` — do not add `rust_analyzer` there, it would start twice and conflict. Settings (clippy on check, `allFeatures`) live in the `vim.g.rustaceanvim` table in `rust.lua`.
+
+**Version pin:** rustaceanvim is pinned to `^5`. v6+ requires Neovim 0.12; we're on 0.11. Bump the pin only after upgrading Neovim.
+
+**Formatting:** rustfmt via conform.nvim with format-on-save.
+
+**Debugging:** Works via `lldb-dap` (install: `sudo dnf install lldb`). The standard `<leader>d*` debug keymaps drive it; `<leader>Rd` lists debuggable targets.
+
+**Tests:** Run through the existing neotest UI via rustaceanvim's built-in adapter (no `cargo-nextest` needed). Same `<leader>t*` keymaps as other languages.
+
+**Cargo.toml:** crates.nvim provides version completion, "newer version" hints, hover, and code actions via an in-process LSP — so completion flows through blink's `lsp` source and the normal LSP keymaps (`gra`, `K`).
+
+**Keymaps** (buffer-local in Rust files, `<leader>R` = "[R]ust"):
+- `<LocalLeader>` n/a — Rust uses `<Leader>R`, not LocalLeader
+- `<Leader>Rr` - Runnables (pick cargo run / a test / etc.)
+- `<Leader>Rd` - Debuggables
+- `<Leader>Rm` - Expand macro
+- `<Leader>Re` - Explain error
+- `<Leader>Rc` - Open Cargo.toml
+- `<Leader>Rp` - Go to parent module
+- `K` - Hover actions (rustaceanvim's richer hover)
+- `gra` - Grouped code actions
+
 ## R Development
 
 **R Language Server:**

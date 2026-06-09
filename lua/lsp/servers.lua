@@ -72,21 +72,6 @@ return {
   -- TypeScript (ts_ls):
   --   ts_ls = {},
   --
-  -- Rust
-  -- Install: pacman -S rust-analyzer
-  rust_analyzer = {
-    cmd = { 'rust-analyzer' },
-    filetypes = { 'rust' },
-    root_markers = { 'Cargo.toml', 'rust-project.json' },
-    settings = {
-      ['rust-analyzer'] = {
-        check = {
-          command = 'clippy',
-        },
-        cargo = {
-          allFeatures = true,
-        },
-      },
-    },
-  },
+  -- Rust: handled by rustaceanvim (see lua/plugins/rust.lua), NOT here.
+  -- Configuring rust_analyzer in this file would start it twice and conflict.
 }

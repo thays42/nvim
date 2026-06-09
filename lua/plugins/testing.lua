@@ -161,6 +161,7 @@ return {
         adapters = {
           require 'neotest-testthat',
           busted_adapter,
+          require 'rustaceanvim.neotest', -- Rust tests via rust-analyzer runnables
         },
         consumers = { notify_summary = notify_summary },
         -- Don't auto-pop the output float; the notify_summary consumer prints a
