@@ -1,91 +1,107 @@
 return {
-  -- Treesitter for syntax highlighting and code understanding
+  -- Treesitter for syntax highlighting and code understanding.
+  -- NOTE: migrated to the `main` branch. The `master` branch is frozen and does
+  -- not support Neovim 0.12+ (it caused `node:range (a nil value)` crashes). On
+  -- `main`, highlight/indent/incremental_selection are no longer modules:
+  -- highlighting + indent are enabled per-buffer below, and incremental
+  -- selection is provided by flash.nvim.
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master', -- Use master branch for stable API
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
     dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects' },
+      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
     },
     config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = {
-          'bash',
-          'go',
-          'gomod',
-          'gosum',
-          'lua',
-          'luadoc',
-          'vim',
-          'vimdoc',
-          'markdown',
-          'markdown_inline',
-          'json',
-          'yaml',
-          'r',
-          'rnoweb',
-        },
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = 'gnn', -- Start selection with gnn (go node)
-            node_incremental = '+', -- Expand selection
-            scope_incremental = false,
-            node_decremental = '-', -- Shrink selection
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ['af'] = { query = '@function.outer', desc = 'around function' },
-              ['if'] = { query = '@function.inner', desc = 'inside function' },
-              ['ac'] = { query = '@class.outer', desc = 'around class' },
-              ['ic'] = { query = '@class.inner', desc = 'inside class' },
-              ['aa'] = { query = '@parameter.outer', desc = 'around argument' },
-              ['ia'] = { query = '@parameter.inner', desc = 'inside argument' },
-              ['ai'] = { query = '@conditional.outer', desc = 'around if' },
-              ['ii'] = { query = '@conditional.inner', desc = 'inside if' },
-              ['al'] = { query = '@loop.outer', desc = 'around loop' },
-              ['il'] = { query = '@loop.inner', desc = 'inside loop' },
-            },
-          },
-          move = {
-            enable = true,
-            goto_next_start = {
-              [']f'] = { query = '@function.outer', desc = 'Next function start' },
-              [']c'] = { query = '@class.outer', desc = 'Next class start' },
-              [']a'] = { query = '@parameter.inner', desc = 'Next argument' },
-            },
-            goto_next_end = {
-              [']F'] = { query = '@function.outer', desc = 'Next function end' },
-              [']C'] = { query = '@class.outer', desc = 'Next class end' },
-            },
-            goto_previous_start = {
-              ['[f'] = { query = '@function.outer', desc = 'Previous function start' },
-              ['[c'] = { query = '@class.outer', desc = 'Previous class start' },
-              ['[a'] = { query = '@parameter.inner', desc = 'Previous argument' },
-            },
-            goto_previous_end = {
-              ['[F'] = { query = '@function.outer', desc = 'Previous function end' },
-              ['[C'] = { query = '@class.outer', desc = 'Previous class end' },
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = {
-              ['<leader>a'] = { query = '@parameter.inner', desc = 'Swap with next argument' },
-            },
-            swap_previous = {
-              ['<leader>A'] = { query = '@parameter.inner', desc = 'Swap with previous argument' },
-            },
-          },
-        },
+      -- Install parsers. `main` has no `ensure_installed`/`auto_install`.
+      require('nvim-treesitter').install {
+        'bash',
+        'go',
+        'gomod',
+        'gosum',
+        'lua',
+        'luadoc',
+        'vim',
+        'vimdoc',
+        'markdown',
+        'markdown_inline',
+        'json',
+        'yaml',
+        'r',
+        'rnoweb',
+        'rust', -- added: was auto-installed on master
+        'toml', -- added: Cargo.toml / crates.nvim
       }
+
+      -- Enable highlighting + (experimental) indentation per buffer.
+      vim.api.nvim_create_autocmd('FileType', {
+        desc = 'Start treesitter highlighting/indent when a parser is available',
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+
+      -- Incremental selection (replaces the removed module) via flash.nvim.
+      vim.keymap.set({ 'n', 'x', 'o' }, 'gnn', function()
+        require('flash').treesitter()
+      end, { desc = 'Treesitter selection (flash)' })
+
+      -- Textobjects: on `main`, setup() only sets options; keymaps are manual.
+      require('nvim-treesitter-textobjects').setup {
+        select = { lookahead = true },
+        move = { set_jumps = true },
+      }
+
+      local select = require 'nvim-treesitter-textobjects.select'
+      local move = require 'nvim-treesitter-textobjects.move'
+      local swap = require 'nvim-treesitter-textobjects.swap'
+
+      -- select (visual / operator-pending)
+      for lhs, q in pairs {
+        ['af'] = { '@function.outer', 'around function' },
+        ['if'] = { '@function.inner', 'inside function' },
+        ['ac'] = { '@class.outer', 'around class' },
+        ['ic'] = { '@class.inner', 'inside class' },
+        ['aa'] = { '@parameter.outer', 'around argument' },
+        ['ia'] = { '@parameter.inner', 'inside argument' },
+        ['ai'] = { '@conditional.outer', 'around if' },
+        ['ii'] = { '@conditional.inner', 'inside if' },
+        ['al'] = { '@loop.outer', 'around loop' },
+        ['il'] = { '@loop.inner', 'inside loop' },
+      } do
+        vim.keymap.set({ 'x', 'o' }, lhs, function()
+          select.select_textobject(q[1], 'textobjects')
+        end, { desc = q[2] })
+      end
+
+      -- move (goto next/previous start/end)
+      for _, m in ipairs {
+        { ']f', 'goto_next_start', '@function.outer', 'Next function start' },
+        { ']c', 'goto_next_start', '@class.outer', 'Next class start' },
+        { ']a', 'goto_next_start', '@parameter.inner', 'Next argument' },
+        { ']F', 'goto_next_end', '@function.outer', 'Next function end' },
+        { ']C', 'goto_next_end', '@class.outer', 'Next class end' },
+        { '[f', 'goto_previous_start', '@function.outer', 'Previous function start' },
+        { '[c', 'goto_previous_start', '@class.outer', 'Previous class start' },
+        { '[a', 'goto_previous_start', '@parameter.inner', 'Previous argument' },
+        { '[F', 'goto_previous_end', '@function.outer', 'Previous function end' },
+        { '[C', 'goto_previous_end', '@class.outer', 'Previous class end' },
+      } do
+        vim.keymap.set({ 'n', 'x', 'o' }, m[1], function()
+          move[m[2]](m[3], 'textobjects')
+        end, { desc = m[4] })
+      end
+
+      -- swap
+      vim.keymap.set('n', '<leader>a', function()
+        swap.swap_next '@parameter.inner'
+      end, { desc = 'Swap with next argument' })
+      vim.keymap.set('n', '<leader>A', function()
+        swap.swap_previous '@parameter.inner'
+      end, { desc = 'Swap with previous argument' })
     end,
   },
 
