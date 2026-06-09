@@ -8,7 +8,11 @@ Personal Neovim configuration. Symlinked to `~/.config/nvim`.
 
 ## Theme
 
-Gruvbox dark with pure black background (#000000) - a vitesse-style variation.
+Vitesse (`ptdewey/vitesse-nvim`) forced to a pure black background (#000000).
+A `ColorScheme` autocmd in `lua/plugins/ui.lua` (augroup `PureBlackBg`) overrides
+the background of `Normal`/`NormalFloat`/`SignColumn`/`LineNr`/`CursorLineNr`/`FoldColumn`
+to `#000000` under whichever colorscheme is active (Vitesse's own default is #121212).
+Switch/preview themes live with `<leader>sc` (Telescope colorscheme picker).
 
 ## Lua Formatting
 

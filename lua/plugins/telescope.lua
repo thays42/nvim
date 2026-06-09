@@ -43,6 +43,9 @@ return {
     map('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
     map('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     map('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+    map('n', '<leader>sc', function()
+      builtin.colorscheme { enable_preview = true }
+    end, { desc = '[S]earch [C]olorscheme (live preview)' })
 
     -- Buffer search
     map('n', '<leader>/', function()

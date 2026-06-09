@@ -1,44 +1,27 @@
 return {
-  -- Colorscheme
+  -- Colorscheme: Vitesse, forced to a pure-black background.
   {
-    'ellisonleao/gruvbox.nvim',
+    'ptdewey/vitesse-nvim',
     priority = 1000,
     config = function()
-      require('gruvbox').setup {
-        contrast = 'hard',
-        italic = {
-          strings = false,
-          comments = false,
-          operators = false,
-        },
-        overrides = {
-          ['@comment.documentation'] = { fg = '#a89984' }, -- Lighter gray for roxygen
-          -- Pure black background (vitesse-style)
-          Normal = { bg = '#000000' },
-          NormalFloat = { bg = '#000000' },
-          SignColumn = { bg = '#000000' },
-          LineNr = { bg = '#000000' },
-          CursorLineNr = { bg = '#000000' },
-          FoldColumn = { bg = '#000000' },
-          -- Markdown: tone down highlights for dark background
-          ['@markup.raw'] = { fg = '#a89984', bg = 'NONE' }, -- Inline code: muted fg, no bg
-          ['@markup.raw.block'] = { bg = 'NONE' }, -- Code block content: no bg (render-markdown handles it)
-          ['@markup.raw.delimiter'] = { fg = '#504945' }, -- ``` fences: very dim
-          ['@markup.heading.1'] = { fg = '#d79921', bold = true }, -- Muted yellow
-          ['@markup.heading.2'] = { fg = '#98971a', bold = true }, -- Muted green
-          ['@markup.heading.3'] = { fg = '#689d6a', bold = true }, -- Muted aqua
-          ['@markup.heading.4'] = { fg = '#a89984', bold = true }, -- Gray
-          ['@markup.heading.5'] = { fg = '#a89984' },
-          ['@markup.heading.6'] = { fg = '#7c6f64' },
-          ['@markup.link'] = { fg = '#689d6a' }, -- Muted aqua for links
-          ['@markup.link.url'] = { fg = '#504945', underline = true }, -- Very dim URLs
-          ['@markup.list'] = { fg = '#7c6f64' }, -- Dim list markers
-          ['@markup.italic'] = { fg = '#bdae93', italic = true },
-          ['@markup.strong'] = { fg = '#d5c4a1', bold = true },
-          ['@markup.quote'] = { fg = '#7c6f64', italic = true }, -- Dim blockquotes
-        },
-      }
-      vim.cmd.colorscheme 'gruvbox'
+      -- Vitesse defaults to a #121212 background; force pure black instead.
+      -- Driven by a ColorScheme autocmd so it survives any future :colorscheme
+      -- (e.g. the <leader>sc picker) rather than being set once.
+      local function force_black(group)
+        local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+        hl.bg = '#000000'
+        vim.api.nvim_set_hl(0, group, hl)
+      end
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('PureBlackBg', { clear = true }),
+        callback = function()
+          for _, g in ipairs { 'Normal', 'NormalFloat', 'SignColumn', 'LineNr', 'CursorLineNr', 'FoldColumn' } do
+            force_black(g)
+          end
+        end,
+      })
+
+      vim.cmd.colorscheme 'vitesse'
     end,
   },
 
