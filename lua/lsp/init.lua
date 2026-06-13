@@ -19,10 +19,10 @@ vim.diagnostic.config {
       [vim.diagnostic.severity.HINT] = '󰌶 ',
     },
   } or {},
-  virtual_text = {
-    source = 'if_many',
-    spacing = 2,
-  },
+  -- No inline diagnostic text: virtual_text overflows the line and virtual_lines
+  -- can't wrap (virt_lines_overflow only does trunc/scroll, never wrap). Gutter
+  -- signs mark WHERE; read the full (wrapping) message with <leader>e or Trouble.
+  virtual_text = false,
 }
 
 -- LSP keymaps (set on attach)

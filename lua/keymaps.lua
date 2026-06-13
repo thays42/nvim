@@ -10,9 +10,8 @@ map('i', 'jk', '<Esc>')
 -- Clear search highlight
 map('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Save and quit
+-- Save and quit (<leader>x freed for Trouble; ZZ does save-and-close)
 map('n', '<leader>w', '<cmd>w<CR>', { desc = '[W]rite file' })
-map('n', '<leader>x', '<cmd>x<CR>', { desc = 'Save and close' })
 
 -- Toggle to last window (useful for R code ↔ R terminal)
 map('n', '<leader>;', '<C-w>p', { desc = 'Toggle to last window' })
@@ -54,6 +53,9 @@ map('n', ']d', vim.diagnostic.goto_next, { desc = 'Next [D]iagnostic' })
 
 -- Diagnostic quickfix
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Show the full diagnostic(s) for the current line in a float (wraps long messages)
+map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror float' })
 
 -- Terminal escape
 map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
