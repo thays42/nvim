@@ -32,6 +32,8 @@ return {
         'rnoweb',
         'rust', -- added: was auto-installed on master
         'toml', -- added: Cargo.toml / crates.nvim
+        'haskell', -- added: haskell-tools.nvim
+        'cabal', -- added: *.cabal project files
       }
 
       -- Enable highlighting + (experimental) indentation per buffer.

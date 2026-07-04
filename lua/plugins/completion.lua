@@ -113,6 +113,7 @@ return {
         go = { 'gofmt', 'goimports' },
         r = { 'air' },
         rust = { 'rustfmt' },
+        haskell = { 'fourmolu' },
       },
       formatters = {
         air = {

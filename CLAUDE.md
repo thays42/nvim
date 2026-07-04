@@ -85,6 +85,37 @@ Configured in `lua/plugins/rust.lua`.
 - `K` - Hover actions (rustaceanvim's richer hover)
 - `gra` - Grouped code actions
 
+## Haskell Development
+
+Configured in `lua/plugins/haskell.lua`.
+
+**Toolchain:** Installed via **ghcup** (`ghc`, `cabal`, `haskell-language-server`). The `haskell-language-server-wrapper` must be on `$PATH`; it selects the HLS build matching each project's GHC. Install:
+```
+ghcup install ghc recommended --set
+ghcup install cabal recommended --set
+ghcup install hls recommended --set
+```
+
+**LSP:** Managed by **haskell-tools.nvim**, NOT `lua/lsp/servers.lua` — do not add `hls` there, it would start twice and conflict (same pattern as rustaceanvim and lean.nvim). Settings live in the `vim.g.haskell_tools` table in `haskell.lua`.
+
+**Version pin:** haskell-tools.nvim is pinned to `^10` (requires Neovim 0.10+, which we're well above). Bump the major to match if a future release raises its Neovim floor.
+
+**Formatting:** fourmolu via conform.nvim with format-on-save (install: `cabal install fourmolu`, or `dnf install fourmolu`). HLS's own `formattingProvider` is also set to fourmolu so any LSP-driven formatting stays consistent.
+
+**Projects:** HLS works best inside a real project (`.cabal` / `stack.yaml`); single-file mode is limited. Start one with `cabal init`.
+
+**Debugging:** Not configured — `haskell-debug-adapter` is finicky. Add a `dap` block to `vim.g.haskell_tools` if you ever need it.
+
+**Keymaps** (buffer-local in Haskell files, `<Leader>H` = "[H]askell"):
+- `<Leader>Hs` - Hoogle signature search (type under cursor)
+- `<Leader>He` - Evaluate all code snippets in comments
+- `<Leader>Hc` - Run code lens
+- `<Leader>Hr` - Toggle GHCi repl (package)
+- `<Leader>Hf` - Toggle GHCi repl (current file)
+- `<Leader>Hq` - Quit GHCi repl
+- `<Leader>Hl` - Open HLS log
+- `K` / `gra` - Hover (with actions) / code actions, via the generic LSP maps; haskell-tools patches the hover handler to include actions
+
 ## R Development
 
 **R Language Server:**
