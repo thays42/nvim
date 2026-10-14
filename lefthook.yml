@@ -1,0 +1,10 @@
+# Generic lefthook — defers to the project's Makefile.
+# Adopted for projects without a language-specific template.
+# Replace with a tighter language-aware config when convenient.
+
+pre-push:
+  # Runs .lefthook/pre-push/ci.sh; see the comment there for why it is a script.
+  scripts:
+    "ci.sh":
+      runner: bash
+      use_stdin: true
